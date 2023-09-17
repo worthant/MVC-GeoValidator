@@ -1,4 +1,32 @@
 <p align="center">
+<a aria-label="Translation" href="./README_RU.md">
+    <img alt="" src="https://img.shields.io/badge/translation-RU-red?style=for-the-badge">
+</a>
+<a aria-label="Translation" href="./README_RU.md">
+    <img alt="" src="https://img.shields.io/badge/translation-RU-red?style=for-the-badge">
+</a>
+<a aria-label="Translation" href="./README_RU.md">
+    <img alt="" src="https://img.shields.io/badge/translation-RU-red?style=for-the-badge">
+</a>
+<a aria-label="Translation" href="./README_RU.md">
+    <img alt="" src="https://img.shields.io/badge/translation-RU-red?style=for-the-badge">
+</a>
+<a aria-label="Translation" href="./README_RU.md">
+    <img alt="" src="https://img.shields.io/badge/translation-RU-red?style=for-the-badge">
+</a>
+</p>
+
+# READ RUSSIAN VERSION, THIS FILE IS OUTDATED
+# READ RUSSIAN VERSION, THIS FILE IS OUTDATED
+# READ RUSSIAN VERSION, THIS FILE IS OUTDATED
+# READ RUSSIAN VERSION, THIS FILE IS OUTDATED
+# READ RUSSIAN VERSION, THIS FILE IS OUTDATED
+# READ RUSSIAN VERSION, THIS FILE IS OUTDATED
+# READ RUSSIAN VERSION, THIS FILE IS OUTDATED
+# READ RUSSIAN VERSION, THIS FILE IS OUTDATED
+
+
+<p align="center">
   <a href="https://ibb.co/Sv4F0Yq">
     <picture>
       <img src="https://i.ibb.co/nkNxfdh/html.png" height="110">
@@ -26,7 +54,7 @@
    <summary><b>Table of Contents</b></summary>
 
 - [Introduction](#intro)
-- [Requirements for Laboratory Work](#requirements)
+- [Requirements for completing var `11117312`](#requirements)
 - [Preparation Topics](#preparation)
 - [How to get everything working?](#setup)
 - [User Manual](#manual)
@@ -48,7 +76,7 @@
 
 <a id="requirements"></a>
 
-## Requirements for variant 1204
+## Requirements for variant 11117312
 
    |![изображение](https://github.com/worthant/simple-one-page-website/assets/43885024/4e3bc97e-313b-4592-9476-2a8cd112fe10)|
    |:-:|
