@@ -27,7 +27,7 @@ window.onload = function () {
 const mainForm = document.querySelector('input[value="Check"]');
 mainForm.addEventListener('click', function (e) {
     // default action is to send the form data to the server and reload the page
-    // by calling .preventDefault() i am stopping the browser from doing this, 
+    // by calling .preventDefault() I am stopping the browser from doing this,
     // which allows me to handle the form submission programmatically in your JavaScript code instead.
     e.preventDefault();
 
@@ -47,24 +47,30 @@ mainForm.addEventListener('click', function (e) {
         if (validator.getResponseCode() === 1) {
             console.log(`everything is ok`);
 
-            fetch(`./script.php?xVal=${xVal}&yVal=${yVal}&rVal=${rVal}`, {
-                method: 'GET',
+            fetch("controller", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded",
+                },
+                body: new URLSearchParams({
+                    "x": xVal,
+                    "y": yVal,
+                    "r": rVal
+                })
             })
                 .then(response => {
                     if (!response.ok) {
-                        throw new Error(`Server responded with bad getaway status: ${response.status}`);
+                        throw new Error(`Server responded with bad getaway status: ${response.status} ${response.text()}`);
                     }
                     return response.text();
                 })
                 .then(function (serverAnswer) {
-                    localStorage.setItem("session", serverAnswer);
-                    document.getElementById("output").innerHTML = serverAnswer;
-                    // addToTable(xVal, yVal, rVal, responseData.result, responseData.curr_time, responseData.exec_time);
-                    // saveToLocalStorage(xVal, yVal, rVal, responseData.result, responseData.curr_time, responseData.exec_time);
+                    let tbody = document.getElementById("result");
+                    tbody.innerHTML = serverAnswer;
                 })
                 .catch(error => {
-                    alert(`There was an error processing your request: ${error.message}`)
-                })
+                    alert(`There was an error processing your request: ${error.message}`);
+                });
         } else {
             Toastify({
                 text: validator.getMessage(),
@@ -97,4 +103,16 @@ mainForm.addEventListener('click', function (e) {
     }
 });
 
+
+function addToTable(x, y, r, result) {
+    const table = document.getElementById("resultTable");
+
+    const newRow = table.insertRow();
+    newRow.insertCell().innerText = x;
+    newRow.insertCell().innerText = y;
+    newRow.insertCell().innerText = r;
+    newRow.insertCell().innerHTML = result
+        ? "<span class=\"success\">Попал</span>"
+        : "<span class=\"fail\">Промазал</span>";
+}
 

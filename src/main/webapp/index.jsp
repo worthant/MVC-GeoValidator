@@ -1,3 +1,4 @@
+<%@ page import="beans.ResultsBean" %>
 <html>
 <head>
     <meta charset="UTF-8">
@@ -11,7 +12,6 @@
 
     <!-- <link rel="stylesheet" href="styles.css"> -->
     <link rel="icon" type="image/png" href="resources/favicon.png">
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
     <title>Web programming laboratory work no. 1</title>
 
     <style>
@@ -150,11 +150,6 @@
             border-radius: 20px 20px 0 0;
         }
 
-        /* .scrollable-body {
-            overflow-y: auto;
-            display: block;
-        } */
-
         table {
             width: 100%;
             border-collapse: collapse;
@@ -180,12 +175,6 @@
             border-right: 1px solid white;
         }
 
-        /* .result-cell-in, .result-cell-out{
-            text-align: center;
-            border-left: 1px solid white;
-            border-right: 1px solid white;
-        } */
-
         .result-cell-in{
             color: green;
         }
@@ -197,7 +186,6 @@
         thead {
             border-bottom: 1px solid white;
         }
-
     </style>
 </head>
 
@@ -216,96 +204,15 @@
 
 <main class="container">
     <div class="graph">
-        <svg height="300" width="300" xmlns="http://www.w3.org/2000/svg">
-
-            <!-- Оси со стрелками -->
-            <line stroke="gray" x1="0" x2="300" y1="150" y2="150" />
-            <line stroke="gray" x1="150" x2="150" y1="0" y2="300" />
-            <polygon fill="white" points="150,0 144,15 156,15" stroke="white" />
-            <polygon fill="white" points="300,150 285,156 285,144" stroke="white" />
-
-            <!-- Засечки -->
-            <line stroke="gray" x1="200" x2="200" y1="155" y2="145" />
-            <line stroke="gray" x1="250" x2="250" y1="155" y2="145" />
-
-            <line stroke="gray" x1="50" x2="50" y1="155" y2="145" />
-            <line stroke="gray" x1="100" x2="100" y1="155" y2="145" />
-
-            <line stroke="gray" x1="145" x2="155" y1="100" y2="100" />
-            <line stroke="gray" x1="145" x2="155" y1="50" y2="50" />
-
-            <line stroke="gray" x1="145" x2="155" y1="200" y2="200" />
-            <line stroke="gray" x1="145" x2="155" y1="250" y2="250" />
-
-            <!-- Подписи к засечкам    -->
-            <text fill="white" x="195" y="140">R/2</text>
-            <text fill="white" x="248" y="140">R</text>
-
-            <text fill="white" x="40" y="140">-R</text>
-            <text fill="white" x="90" y="140">-R/2</text>
-
-            <text fill="white" x="160" y="105">R/2</text>
-            <text fill="white" x="160" y="55">R</text>
-
-            <text fill="white" x="160" y="205">-R/2</text>
-            <text fill="white" x="160" y="255">-R</text>
-
-            <text fill="white" x="160" y="10">Y</text>
-            <text fill="white" x="290" y="140">X</text>
-
-            <!-- Прямоугольник (слева внизу) -->
-            <rect x="100" y="150" width="50" height="100" fill="#FFFF00" fill-opacity="0.1" stroke="#FFFF00" />
-
-            <!-- Треугольник (справа снизу) -->
-            <polygon fill="#0000FF" fill-opacity="0.1" points="150,250 150,150 200,150" stroke="#0000FF" />
-
-            <!-- Полукруг (слева сверху) -->
-            <path d="M 100 150 A 50 50, 0, 0, 1, 150 100 L 150 150 Z" fill="green" fill-opacity="0.1"
-                  stroke="#39FF14" />
-
-            <!-- Центр оси координат -->
-            <circle cx="150" cy="150" id="target-dot" r="0" stroke="white" fill="white"></circle>
-        </svg>
+        <jsp:include page="graph.jsp" />
     </div>
 
     <div class="form" id="input-form">
-        <form>
-            <div class="input-group">
-                <p>X:</p>
-                <div id="x" class="radio-group">
-                    <label><input type="radio" name="x" value="-3">-3</label>
-                    <label><input type="radio" name="x" value="-2">-2</label>
-                    <label><input type="radio" name="x" value="-1">-1</label>
-                    <label><input type="radio" name="x" value="0">0</label>
-                    <label><input type="radio" name="x" value="1">1</label>
-                    <label><input type="radio" name="x" value="2">2</label>
-                    <label><input type="radio" name="x" value="3">3</label>
-                    <label><input type="radio" name="x" value="4">4</label>
-                    <label><input type="radio" name="x" value="5">5</label>
-                </div>
-            </div>
-            <div class="input-group">
-                <label for="y">Y:</label>
-                <input type="text" id="y" name="y" maxlength="8">
-            </div>
-            <div class="input-group">
-                <label for="r">R:</label>
-                <select id="r" name="r">
-                    <option value="1">1</option>
-                    <option value="1.5">1.5</option>
-                    <option value="2">2</option>
-                    <option value="2.5">2.5</option>
-                    <option value="3">3</option>
-                </select>
-            </div>
-            <div class="check-btn">
-                <input type="submit" value="Check">
-            </div>
-        </form>
+        <jsp:include page="inputForm.jsp" />
     </div>
 
     <div class="table">
-        <table class="resultTable">
+        <table class="resultTable" id="result">
             <thead>
             <tr>
                 <th>x</th>
@@ -317,25 +224,33 @@
             </tr>
             </thead>
             <tbody id="output">
-            <!-- The rows here will be populated by JavaScript -->
-            <tr>
-                <td>Data for x</td>
-                <td>Data for y</td>
-                <td>Data for r</td>
-                <td>Data for hit or not</td>
-                <td>Data for current time</td>
-                <td>Data for duration</td>
-            </tr>
+<%--                <%--%>
+<%--                    ResultsBean bean = (ResultsBean) session.getAttribute("resultsBean");--%>
+<%--                    if (bean != null) {--%>
+<%--                        for (ResultsBean.Result result : bean.getResults()) {--%>
+<%--                %>--%>
+<%--                <tr>--%>
+<%--                    <td><%= result.getX() %></td>--%>
+<%--                    <td><%= result.getY() %></td>--%>
+<%--                    <td><%= result.getR() %></td>--%>
+<%--                    <td><%= result.isHit() ? "Hit" : "Didn't hit" %></td>--%>
+<%--                    <td><%= result.getCurrentTime() %></td>--%>
+<%--                    <td><%= result.getBenchmarkTime() %></td>--%>
+<%--                </tr>--%>
+<%--                <%--%>
+<%--                        }--%>
+<%--                    }--%>
+<%--                %>--%>
             </tbody>
         </table>
     </div>
 </main>
 
-<audio id="background-music" loop>
-    <source src="nostalgic.mp3" type="audio/mp3">
-</audio>
+<%--<audio id="background-music" loop>--%>
+<%--    <source src="nostalgic.mp3" type="audio/mp3">--%>
+<%--</audio>--%>
+
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
-<script type="text/javascript" src="addToTable.js"></script>
 <script type="module" src="main.js"></script>
 </body>
 </html>
