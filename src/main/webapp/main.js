@@ -117,6 +117,8 @@ svgElement.addEventListener("click", function(event) {
     const svgCenterY = rect.top + rect.height / 2; // Центр SVG по Y
     const r = parseFloat(rElement.value);
 
+    console.log(`svgCenterX: ${svgCenterX}, svgCenterY: ${svgCenterY}, svgCenterY: ${svgCenterY}`)
+
     // Получаем координаты клика относительно документа и пересчитываем их относительно центра SVG
     let x = event.clientX - svgCenterX;
     let y = svgCenterY - event.clientY;
@@ -184,16 +186,50 @@ function transformIntoDot(x, y, r, data) {
     const svgY = 150 - (y / r) * 100;
 
     // Добавляем точку
-    addDotToSvg(svgX, svgY, color);
+    addDotToSvg(svgX, svgY, color, 5);
 }
 
-function addDotToSvg(x, y, color) {
+function addDotToSvg(x, y, color, r) {
     const svgElement = document.querySelector("svg");
 
     const newDot = document.createElementNS("http://www.w3.org/2000/svg", "circle");
     newDot.setAttribute("cx", x);
     newDot.setAttribute("cy", y);
-    newDot.setAttribute("r", 5); // Размер точки
+    newDot.setAttribute("r", r);
     newDot.setAttribute("fill", color);
     svgElement.appendChild(newDot);
 }
+
+function updateSVG(r) {
+    // Update text
+    document.querySelector('text[x="195"]').textContent = `${r/2}`;
+    document.querySelector('text[x="248"]').textContent = `${r}`;
+    document.querySelector('text[x="40"]').textContent = `-${r}`;
+    document.querySelector('text[x="90"]').textContent = `-${r/2}`;
+    document.querySelector('text[y="105"]').textContent = `${r/2}`;
+    document.querySelector('text[y="55"]').textContent = `${r}`;
+    document.querySelector('text[y="205"]').textContent = `-${r/2}`;
+    document.querySelector('text[y="255"]').textContent = `-${r}`;
+
+    // Update rectangle (left bottom)
+    const rect = document.querySelector("rect");
+    rect.setAttribute('width', 100 * r / 2);
+    rect.setAttribute('height', 100 * r);
+
+    // Update triangle (right bottom)
+    const triangle = document.querySelector("polygon");
+    const trianglePoints = `150,250 150,${250 - 100 * r} ${150 - 100 * r / 2},150`;
+    triangle.setAttribute('points', trianglePoints);
+
+    // Update semi-circle (left top)
+    const semiCircle = document.querySelector("path");
+    const semiCirclePath = `M ${150 - 100 * r} 150 A ${100 * r} ${100 * r}, 0, 0, 1, 150 ${150 - 100 * r} L 150 150 Z`;
+    semiCircle.setAttribute('d', semiCirclePath);
+}
+
+const rElement = document.querySelector('#r');
+
+rElement.addEventListener('input', function() {
+    const r = parseFloat(rElement.value);
+    updateSVG(r);
+});

@@ -4,6 +4,7 @@ import beans.ResultsBean;
 import com.google.gson.Gson;
 import utils.AreaChecker;
 import utils.CoordinatesValidator;
+import utils.ErrorUtil;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -17,6 +18,7 @@ import java.util.Map;
 @WebServlet("/check")
 public class AreaCheckServlet extends HttpServlet {
     public static final int SC_UNPROCESSABLE_ENTITY = 422;
+    public static final int SC_INTERNAL_SERVER_ERROR = 500;
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         double x = 0;
@@ -30,9 +32,8 @@ public class AreaCheckServlet extends HttpServlet {
             CoordinatesValidator validator = new CoordinatesValidator(x, y, r);
 
             if (!validator.checkData()) {
-                response.setStatus(SC_UNPROCESSABLE_ENTITY);
                 System.out.println("validation haven't passed");
-                sendError(response, "Data haven't passed validation");
+                ErrorUtil.sendError(response, SC_UNPROCESSABLE_ENTITY, "Data haven't passed validation");
                 return;
             }
 
@@ -56,20 +57,11 @@ public class AreaCheckServlet extends HttpServlet {
 //            out.println("<td>" + r + "</td>");
 //            out.println("<td>" + (isHit ? "Hit" : "Didn't hit") + "</td>");
 //            out.println("</tr>");
+        } catch (NumberFormatException e) {
+            ErrorUtil.sendError(response, SC_UNPROCESSABLE_ENTITY, "Invalid number format");
         } catch (Exception e) {
-            request.getRequestDispatcher("./index.jsp").forward(request, response);
+            e.printStackTrace();
+            ErrorUtil.sendError(response, SC_INTERNAL_SERVER_ERROR, "Internal Server Error");
         }
-    }
-
-    public void sendError(HttpServletResponse response, String errorMessage) throws IOException {
-        var json = new Gson();
-        Map<String, Object> jsonResponse = new HashMap<>() {{
-            put("error", errorMessage);
-            put("status", "UNPROCESSABLE_ENTITY");
-        }};
-
-        response.setContentType("application/json");
-        response.getWriter().write(json.toJson(jsonResponse));
-        response.setStatus(422);
     }
 }
