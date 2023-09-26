@@ -78,74 +78,16 @@
 
 ## Requirements for variant 11117312
 
-   |![изображение](https://github.com/worthant/simple-one-page-website/assets/43885024/4e3bc97e-313b-4592-9476-2a8cd112fe10)|
-   |:-:|
+|![graph](https://github.com/worthant/MVC-GeoValidator/assets/43885024/625ac219-2029-432d-8080-f23ddcb4ead4)|
+|:-:|
 
-   1. [x] 1. Develop a `PHP script` that determines whether a point on the coordinate plane falls within a specified area.
-
-      ```python
-      •  The R parameter and the coordinates of the point should be passed to the script via an `HTTP request`.
-      •  The script should:
-         ├ perform `validation` of the data
-         └ return an `HTML page` with a table
-            └ the `table` should contain the received parameters and the result of the calculations
-               └ *i.e., the fact of the point falling or not falling into the area*
-      •  Previous results should be preserved between requests and displayed in the table.
-      •  The response should include data on the current time and the script execution time.
-
-   2. [x] 2. Create an HTML page that generates data for submission for processing by the PHP script.
-
-       ```python
-       •  `Block layout` should be used for positioning text and graphic elements.
-       •  Form data should be sent for processing via a `GET request`.
-       •  Stylesheets should be located in html file (<styles>).
-       •  The HTML page should have a "header" containing:
-          ├ student's full name
-          ├ group number
-          └ variant number. 
-       •  When formatting the header, it is necessary to explicitly specify (in the cascading stylesheet):
-          ├ font `(fantasy)`
-          ├ font color
-          └ font size
-       •  Input element margins should be specified in `percentages`.
-       ```
-
-   3. [x] 3. In working with CSS, the use of the following should be demonstrated:
-      - [x] ID selectors
-      - [x] Pseudo-class selectors
-      - [x] Attribute selectors
-      - [x] Pseudo-element selectors
-
-   4. [x] 4. As well as such CSS style properties as:
-      - [x] inheritance
-      - [x] cascading
-
-   5. [x] 5. The page should contain a script in JavaScript
-
-       ```python
-       •  The script should validate values entered by the user in form fields
-       •  Any incorrect values (letters in point coordinates / negative radius / ... ) should be blocked.
-       ```
-
+   
 <a id="preparation"></a>
 
 ## Preparation Topics
 
    ```python
-   1. HTTP protocol. Structure of requests and responses, request methods, server response codes, request and response headers.
-   2. HTML markup language. Features, main tags and tag attributes.
-   3. Structure of an HTML page. Document Object Model (DOM).
-   4. HTML forms. Setting the HTTP request method. Rules for placing forms on pages, types of input fields.
-   5. Cascading Style Sheets (CSS). Structure - rules, selectors. Types of selectors, features of their application. Rule priorities. Advantages of CSS over direct style setting via tag attributes.
-   6. LESS, Sass, SCSS. Key features, comparative characteristics. Browser compatibility, translation into "ordinary" CSS.
-   7. Client scripts. Features, areas of application. JavaScript language.
-   8. ECMAScript versions, new features of ES6 and ES7.
-   9. Synchronous and asynchronous processing of HTTP requests. AJAX.
-   10. jQuery library. Purpose, main API. Usage for implementing AJAX and working with DOM.
-   11. Implementing AJAX using SuperAgent.
-   12. Server scripts. CGI - definition, purpose, key features.
-   13. FastCGI - features of the technology, advantages and disadvantages relative to CGI.
-   14. PHP language - syntax, data types, embedding in web pages, rules for handling HTTP requests. Features of the implementation of OOP principles in PHP.
+   1.
    ```
 
 <a id="setup"></a>
@@ -191,9 +133,9 @@
 
 ## User Manual
 
-   1. Fill in the form fields on the main page: enter the point coordinates and radius
-   2. Click the "Check" button to send the data for processing by the PHP script
-   3. The processing results will be displayed in the table on the main page
+   1.
+   2.
+   3.
 
 <a id="theory"></a>
 
