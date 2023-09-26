@@ -3,7 +3,7 @@ import inputValidator from "./inputValidator.js";
 "use strict";
 
 document.addEventListener("DOMContentLoaded", () => {
-    // Update Date and Time Function
+        // Update Date and Time Function
     function updateDateTime() {
         const now = new Date();
         document.getElementById("date").innerText = now.toDateString();
@@ -38,7 +38,7 @@ mainForm.addEventListener('click', function (e) {
     if (xElement && yElement && rElement) {
         const xVal = parseFloat(xElement.value);
         const yVal = parseFloat(yElement.value.substring(0, 8));
-        const rVal = parseFloat(rElement.value);
+        const rVal = parseFloat(rElement.value.substring(0, 8));
         console.log(`X: ${xVal}, Y: ${yVal}, R: ${rVal}`);
 
         let validator = new inputValidator();
@@ -65,7 +65,7 @@ mainForm.addEventListener('click', function (e) {
                     return response.text();
                 })
                 .then(function (serverAnswer) {
-                    let tbody = document.getElementById("result");
+                    let tbody = document.getElementById("output");
                     tbody.innerHTML = serverAnswer;
                 })
                 .catch(error => {
@@ -103,16 +103,97 @@ mainForm.addEventListener('click', function (e) {
     }
 });
 
+const svgElement = document.querySelector("svg");
+svgElement.addEventListener("click", function(event) {
+    // Проверяем, установлен ли радиус
+    const rElement = document.querySelector('#r');
+    if (!rElement || !rElement.value || isNaN(parseFloat(rElement.value))) {
+        alert("Не возможно определить координаты точки без радиуса");
+        return;
+    }
 
-function addToTable(x, y, r, result) {
-    const table = document.getElementById("resultTable");
+    const rect = svgElement.getBoundingClientRect();
+    const svgCenterX = rect.left + rect.width / 2; // Центр SVG по X
+    const svgCenterY = rect.top + rect.height / 2; // Центр SVG по Y
+    const r = parseFloat(rElement.value);
 
-    const newRow = table.insertRow();
-    newRow.insertCell().innerText = x;
-    newRow.insertCell().innerText = y;
-    newRow.insertCell().innerText = r;
-    newRow.insertCell().innerHTML = result
-        ? "<span class=\"success\">Попал</span>"
-        : "<span class=\"fail\">Промазал</span>";
+    // Получаем координаты клика относительно документа и пересчитываем их относительно центра SVG
+    let x = event.clientX - svgCenterX;
+    let y = svgCenterY - event.clientY;
+
+    // Нормализуем координаты относительно заданного радиуса R
+    x = Math.round((x / 150) * r);
+    y = (y / 150) * r;
+
+    console.log(`X: ${x}, Y: ${y}, R: ${r}`);
+
+    let validator = new inputValidator();
+    validator.validate(x, y, r);
+
+    if (validator.getResponseCode() === 1) {
+        console.log(`everything is ok`);
+
+        fetch("controller", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded",
+            },
+            body: new URLSearchParams({
+                "x": x,
+                "y": y,
+                "r": r
+            })
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`Server responded with bad getaway status: ${response.status} ${response.text()}`);
+                }
+                return response.text();
+            })
+            .then(function (serverAnswer) {
+                let tbody = document.getElementById("output");
+                tbody.innerHTML = serverAnswer;
+                transformIntoDot(x, y, r, serverAnswer)
+            })
+            .catch(error => {
+                alert(`There was an error processing your request: ${error.message}`);
+            });
+    } else {
+            Toastify({
+                text: validator.getMessage(),
+                className: "info",
+                style: {
+                    background: "linear-gradient(to right, #00b09b, #96c93d)",
+                    border: "1px solid white"
+                },
+                offset: {
+                    x: 240,
+                    y: 60
+                },
+                position: "right",
+            }).showToast();
+        }
+});
+
+function transformIntoDot(x, y, r, data) {
+    const success = data.lastIndexOf("Hit") > data.lastIndexOf("Didnt hit");
+    const color = success ? "green" : "red";
+
+    // Перевод в координаты SVG
+    const svgX = (x / r) * 100 + 150;
+    const svgY = 150 - (y / r) * 100;
+
+    // Добавляем точку
+    addDotToSvg(svgX, svgY, color);
 }
 
+function addDotToSvg(x, y, color) {
+    const svgElement = document.querySelector("svg");
+
+    const newDot = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+    newDot.setAttribute("cx", x);
+    newDot.setAttribute("cy", y);
+    newDot.setAttribute("r", 5); // Размер точки
+    newDot.setAttribute("fill", color);
+    svgElement.appendChild(newDot);
+}

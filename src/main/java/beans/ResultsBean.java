@@ -23,16 +23,12 @@ public class ResultsBean {
         private String y;
         private String r;
         private boolean isHit;
-        private String currentTime;
-        private String benchmarkTime;
 
-        public Result(String x, String y, String r, boolean isHit, String currentTime, String benchmarkTime) {
+        public Result(String x, String y, String r, boolean isHit) {
             this.x = x;
             this.y = y;
             this.r = r;
             this.isHit = isHit;
-            this.currentTime = currentTime;
-            this.benchmarkTime = benchmarkTime;
         }
 
         public String getX() {
@@ -65,22 +61,6 @@ public class ResultsBean {
 
         public void setHit(boolean hit) {
             isHit = hit;
-        }
-
-        public String getCurrentTime() {
-            return currentTime;
-        }
-
-        public void setCurrentTime(String currentTime) {
-            this.currentTime = currentTime;
-        }
-
-        public String getBenchmarkTime() {
-            return benchmarkTime;
-        }
-
-        public void setBenchmarkTime(String benchmarkTime) {
-            this.benchmarkTime = benchmarkTime;
         }
     }
 }

@@ -219,11 +219,10 @@
                 <th>y</th>
                 <th>r</th>
                 <th>target hit or not</th>
-                <th>current time</th>
-                <th>duration of script.php running</th>
             </tr>
             </thead>
             <tbody id="output">
+                <jsp:include page="table.jsp"/>
 <%--                <%--%>
 <%--                    ResultsBean bean = (ResultsBean) session.getAttribute("resultsBean");--%>
 <%--                    if (bean != null) {--%>

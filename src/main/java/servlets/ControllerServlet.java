@@ -29,4 +29,9 @@ public class ControllerServlet extends HttpServlet {
             request.getRequestDispatcher("./index.jsp").forward(request, response);
         }
     }
+
+    public static double getDouble(HttpServletRequest request, String parameter) {
+        String param = request.getParameter(parameter);
+        return Double.parseDouble(param.replace(",", "."));
+    }
 }

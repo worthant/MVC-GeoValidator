@@ -4,14 +4,14 @@ export default class inputValidator{
         this.message = message;
     }
     validate(xVal, yVal, rVal){
-        if (![-3, -2, -1, 0, 1, 2, 3, 4, 5].includes(xVal)) {
-            this.message = "The X value should be something from this array: [-3, -2, -1, 0, 1, 2, 3, 4, 5]";
+        if (![-4, -3, -2, -1, 0, 1, 2, 3, 4].includes(xVal)) {
+            this.message = "The X value should be something from this array: [-4, -3, -2, -1, 0, 1, 2, 3, 4]";
             this.responseCode = 0;
-        } else if (!(-5 < yVal && yVal < 5)){
-            this.message = "The Y value should be in (-5, 5) interval";
+        } else if (!(-3 < yVal && yVal < 5)){
+            this.message = "The Y value should be in (-3, 5) interval";
             this.responseCode = 0;
-        } else if (![1, 1.5, 2, 2.5, 3].includes(rVal)){
-            this.message = "The R value should be something from this array: [1, 1.5, 2, 2.5, 3]";
+        } else if (!(2 < rVal && rVal < 5)){
+            this.message = "The R value should be in (2, 5) interval";
             this.responseCode = 0;
         } else {
            this.responseCode = 1;

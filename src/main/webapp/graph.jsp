@@ -1,9 +1,7 @@
 <%--
-  Created by IntelliJ IDEA.
-  User: Admin
-  Date: 25.09.2023
-  Time: 14:36
-  To change this template use File | Settings | File Templates.
+    Document   : graph.jsp
+    Created on : 25.09.2023, 14:36
+    Author     : worthant
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
@@ -49,17 +47,18 @@
     <text fill="white" x="290" y="140">X</text>
 
     <!-- Прямоугольник (слева внизу) -->
-    <rect x="100" y="150" width="50" height="100" fill="#FFFF00" fill-opacity="0.1" stroke="#FFFF00"></rect>
+    <rect x="150" y="150" width="50" height="100" fill="#FFFF00" fill-opacity="0.1" stroke="#FFFF00"></rect>
 
     <!-- Треугольник (справа снизу) -->
-    <polygon fill="#0000FF" fill-opacity="0.1" points="150,250 150,150 200,150" stroke="#0000FF"></polygon>
+    <polygon fill="#0000FF" fill-opacity="0.1" points="150,250 150,150 100,150" stroke="#0000FF"></polygon>
 
     <!-- Полукруг (слева сверху) -->
-    <path d="M 100 150 A 50 50, 0, 0, 1, 150 100 L 150 150 Z" fill="green" fill-opacity="0.1"
+    <path d="M 50 150 A 100 100, 0, 0, 1, 150 50 L 150 150 Z" fill="green" fill-opacity="0.1"
           stroke="#39FF14"></path>
 
     <!-- Центр оси координат -->
     <circle cx="150" cy="150" id="target-dot" r="0" stroke="white" fill="white"></circle>
 </svg>
 </body>
+
 </html>

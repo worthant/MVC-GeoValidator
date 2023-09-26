@@ -15,6 +15,7 @@
     <div class="input-group">
         <p>X:</p>
         <div id="x" class="radio-group">
+            <label><input type="radio" name="x" value="-4">-4</label>
             <label><input type="radio" name="x" value="-3">-3</label>
             <label><input type="radio" name="x" value="-2">-2</label>
             <label><input type="radio" name="x" value="-1">-1</label>
@@ -23,7 +24,6 @@
             <label><input type="radio" name="x" value="2">2</label>
             <label><input type="radio" name="x" value="3">3</label>
             <label><input type="radio" name="x" value="4">4</label>
-            <label><input type="radio" name="x" value="5">5</label>
         </div>
     </div>
     <div class="input-group">
@@ -32,13 +32,7 @@
     </div>
     <div class="input-group">
         <label for="r">R:</label>
-        <select id="r" name="r">
-            <option value="1">1</option>
-            <option value="1.5">1.5</option>
-            <option value="2">2</option>
-            <option value="2.5">2.5</option>
-            <option value="3">3</option>
-        </select>
+        <input type="text" id="r" name="r" maxlength="8">
     </div>
     <div class="check-btn">
         <input type="submit" value="Check">
