@@ -109,13 +109,13 @@
 
 > Просто `vim standalone.xml`, потом i для `insert` и редачим. Чтобы сохранить и выйти из вима нажмите `Esc` и напишите `:wq`
 
-```bash
+```xml
 <interface name="public">
   <inet-address value="${jboss.bind.address:127.0.0.1}" />
 </interface>
 ```
 на
-```bash
+```xml
 <interface name="public">
   <any-address />
 </interface>
@@ -127,21 +127,21 @@
 - ВАЖНО! Поменять все остальные порты так, чтобы при запуске сервера не вылетало никаких ошибок (`already in use`, e.t.c.)
 > как только я поменял все порты - у меня увиделись все сервлёты и сервер заработал, до этого довольствовался 404
 
-```
+```xml
 <socket-binding name="http" port="${jboss.http.port:8080}" />
 <socket-binding name="https" port="${jboss.https.port:443}"/>
 ...
 ...
 ```
 на
-```
+```xml
 <socket-binding name="http" port="${jboss.http.port:<portbase>}"/>
 ```
 ! где **portbase** - число из гугл-журнала, также можно добавить к нему число от 1 до 99, т.к. portbase выдают с расчётом, что 99 портов, идущие после него, тоже ваши.
 
 
 К примеру, мой portbase - `32318`. Он выдаётся с с расчётом, что 99 портов, идущие после него, тоже мои, поэтому я написал любые порты больше 32318 на 1-99 и получился мой `standalone.xml`:
-```
+```xml
 <socket-binding name="ajp" port="${jboss.ajp.port:32319}"/>
 <socket-binding name="http" port="${jboss.http.port:32318}"/>
 <socket-binding name="https" port="${jboss.https.port:32320}"/>
@@ -150,7 +150,7 @@
 ```
 
 4. Подключаемся к helios, пробросив порты с помощью команды:
-```
+```bash
 ssh -p 2222 s******@se.ifmo.ru -L <portbase>:helios.cs.ifmo.ru:<portbase>
 ```   
 аргумент ssh команды -L означает, что порт на локальном хосте должен быть перенаправлен на указанный хост и
