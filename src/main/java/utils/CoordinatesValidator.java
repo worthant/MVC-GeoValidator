@@ -32,6 +32,6 @@ public class CoordinatesValidator {
     }
 
     private boolean checkR() {
-        return r > 2 && r <= 5;
+        return r > 2 && r < 5;
     }
 }

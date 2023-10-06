@@ -223,23 +223,6 @@
             </thead>
             <tbody id="output">
                 <jsp:include page="table.jsp"/>
-<%--                <%--%>
-<%--                    ResultsBean bean = (ResultsBean) session.getAttribute("resultsBean");--%>
-<%--                    if (bean != null) {--%>
-<%--                        for (ResultsBean.Result result : bean.getResults()) {--%>
-<%--                %>--%>
-<%--                <tr>--%>
-<%--                    <td><%= result.getX() %></td>--%>
-<%--                    <td><%= result.getY() %></td>--%>
-<%--                    <td><%= result.getR() %></td>--%>
-<%--                    <td><%= result.isHit() ? "Hit" : "Didn't hit" %></td>--%>
-<%--                    <td><%= result.getCurrentTime() %></td>--%>
-<%--                    <td><%= result.getBenchmarkTime() %></td>--%>
-<%--                </tr>--%>
-<%--                <%--%>
-<%--                        }--%>
-<%--                    }--%>
-<%--                %>--%>
             </tbody>
         </table>
     </div>
