@@ -18,6 +18,15 @@ export default class inputValidator{
         }
     }
 
+    validateR(rVal) {
+        if (!(2 < rVal && rVal < 5)){
+            this.message = "The R value should be in (2, 5) interval";
+            this.responseCode = 0;
+        } else {
+            this.responseCode = 1;
+        }
+    }
+
     getResponseCode(){
         return this.responseCode;
     }

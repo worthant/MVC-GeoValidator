@@ -2,26 +2,117 @@ import inputValidator from "./inputValidator.js";
 
 "use strict";
 
+const canvas = document.getElementById("graphCanvas");
+const ctx = canvas.getContext("2d");
+let message = "";
+
+function setCanvasDPI() {
+    let dpi = window.devicePixelRatio;
+    let canvasElement = document.getElementById('graphCanvas');
+    let style = {
+        height() {
+            return +getComputedStyle(canvasElement).getPropertyValue('height').slice(0, -2);
+        },
+        width() {
+            return +getComputedStyle(canvasElement).getPropertyValue('width').slice(0, -2);
+        }
+    };
+
+    canvasElement.setAttribute('width', style.width() * dpi);
+    canvasElement.setAttribute('height', style.height() * dpi);
+}
+
+function drawGraph(R) {
+    let width = canvas.width;
+    let height = canvas.height;
+
+    let baseScaling = width / 6;
+    let dynamicScalingFactor = baseScaling / R;
+
+    // Clear canvas
+    ctx.clearRect(0, 0, width, height);
+
+    // Draw x and y axes
+    ctx.strokeStyle = "gray";
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(0, height / 2);
+    ctx.lineTo(width, height / 2);
+    ctx.moveTo(width / 2, 0);
+    ctx.lineTo(width / 2, height);
+    ctx.stroke();
+
+    // Drawing the areas
+    // Triangle (lower right)
+    ctx.fillStyle = "#0000FF10"; // blue with 10% opacity
+    ctx.beginPath();
+    ctx.moveTo(width / 2, height / 2);
+    ctx.lineTo(width / 2, height / 2 + R * dynamicScalingFactor);
+    ctx.lineTo(width / 2 - R * dynamicScalingFactor, height / 2);
+    ctx.closePath();
+    ctx.fill();
+    ctx.strokeStyle = "#0000FF";
+    ctx.stroke();
+
+    // Rectangle (lower left)
+    ctx.fillStyle = "#FFFF0010"; // yellow with 10% opacity
+    ctx.fillRect(width / 2, height / 2, R * dynamicScalingFactor, R * dynamicScalingFactor);
+    ctx.strokeStyle = "#FFFF00";
+    ctx.strokeRect(width / 2, height / 2, R * dynamicScalingFactor, R * dynamicScalingFactor);
+
+    // Semi-circle (upper left)
+    ctx.fillStyle = "#39FF1410"; // green with 10% opacity
+    ctx.beginPath();
+    ctx.arc(width / 2, height / 2, R * dynamicScalingFactor, Math.PI, 1.5 * Math.PI);
+    ctx.lineTo(width / 2, height / 2);
+    ctx.closePath();
+    ctx.fill();
+    ctx.strokeStyle = "#39FF14";
+    ctx.beginPath();
+    ctx.arc(width / 2, height / 2, R * dynamicScalingFactor, Math.PI, 1.5 * Math.PI);
+    ctx.stroke();
+
+    // Draw ticks and labels
+    ctx.fillStyle = "white";
+    ctx.fillText(R.toString(), width / 2 + R * dynamicScalingFactor, height / 2 + 15);
+    ctx.fillText((R / 2).toString(), width / 2 + (R / 2) * dynamicScalingFactor, height / 2 + 15);
+    ctx.fillText((-R).toString(), width / 2 - R * dynamicScalingFactor, height / 2 + 15);
+    ctx.fillText((-R / 2).toString(), width / 2 - (R / 2) * dynamicScalingFactor, height / 2 + 15);
+    ctx.fillText("X", width - 10, height / 2 + 15);
+    ctx.fillText("Y", width / 2 + 5, 10);
+}
+
+
+function isPointInsideArea(x, y, R) {
+    let validator = new inputValidator();
+    validator.validate(x, y, R);
+    message = validator.getMessage();
+    return validator.getResponseCode() === 1;
+}
+
+function isRadiusAcceptable(R) {
+    let validator = new inputValidator();
+    validator.validateR(R);
+    message = validator.getMessage();
+    return validator.getResponseCode() === 1;
+}
+
 document.addEventListener("DOMContentLoaded", () => {
-        // Update Date and Time Function
     function updateDateTime() {
         const now = new Date();
         document.getElementById("date").innerText = now.toDateString();
         document.getElementById("time").innerText = now.toTimeString().substring(0, 8);
     }
 
-    // Initial Date Time Update
     updateDateTime();
     setInterval(updateDateTime, 1000);
 });
 
 window.onload = function () {
-    // const savedData = JSON.parse(localStorage.getItem('tableData')) || [];
-    // savedData.forEach(data => {
-    //     addToTable(data.x, data.y, data.r, data.result, data.curr_time, data.exec_time);
-    // })
     console.log(localStorage.getItem("session"));
     document.getElementById("output").innerHTML = localStorage.getItem("session");
+    setCanvasDPI();
+    drawGraph(3); // draw default graph
 }
 
 const mainForm = document.querySelector('input[value="Check"]');
@@ -41,10 +132,7 @@ mainForm.addEventListener('click', function (e) {
         const rVal = parseFloat(rElement.value.substring(0, 8));
         console.log(`X: ${xVal}, Y: ${yVal}, R: ${rVal}`);
 
-        let validator = new inputValidator();
-        validator.validate(xVal, yVal, rVal);
-
-        if (validator.getResponseCode() === 1) {
+        if (isPointInsideArea(xVal, yVal, rVal)) {
             console.log(`everything is ok`);
 
             fetch("controller", {
@@ -73,7 +161,7 @@ mainForm.addEventListener('click', function (e) {
                 });
         } else {
             Toastify({
-                text: validator.getMessage(),
+                text: message,
                 className: "info",
                 style: {
                     background: "linear-gradient(to right, #00b09b, #96c93d)",
@@ -104,35 +192,24 @@ mainForm.addEventListener('click', function (e) {
 });
 
 const svgElement = document.querySelector("svg");
-svgElement.addEventListener("click", function(event) {
-    // Проверяем, установлен ли радиус
+canvas.addEventListener("click", function (event) {
     const rElement = document.querySelector('#r');
     if (!rElement || !rElement.value || isNaN(parseFloat(rElement.value))) {
         alert("Не возможно определить координаты точки без радиуса");
         return;
     }
 
-    const rect = svgElement.getBoundingClientRect();
-    const svgCenterX = rect.left + rect.width / 2; // Центр SVG по X
-    const svgCenterY = rect.top + rect.height / 2; // Центр SVG по Y
-    const r = parseFloat(rElement.value);
+    let x = event.clientX - canvas.getBoundingClientRect().left;
+    let y = event.clientY - canvas.getBoundingClientRect().top;
+    let R = parseFloat(rElement.value);
 
-    console.log(`svgCenterX: ${svgCenterX}, svgCenterY: ${svgCenterY}, svgCenterY: ${svgCenterY}`)
+    let graphX = (x - canvas.width / 2) / scalingFactor;
+    let graphY = (canvas.height / 2 - y) / scalingFactor;
 
-    // Получаем координаты клика относительно документа и пересчитываем их относительно центра SVG
-    let x = event.clientX - svgCenterX;
-    let y = svgCenterY - event.clientY;
+    console.log(`Raw values: X: ${x}, Y: ${y}, R: ${R}`);
+    console.log(`Graph values: ${graphX}, ${graphY}`);
 
-    // Нормализуем координаты относительно заданного радиуса R
-    x = Math.round((x / 150) * r);
-    y = (y / 150) * r;
-
-    console.log(`X: ${x}, Y: ${y}, R: ${r}`);
-
-    let validator = new inputValidator();
-    validator.validate(x, y, r);
-
-    if (validator.getResponseCode() === 1) {
+    if (isPointInsideArea(x, y, R)) {
         console.log(`everything is ok`);
 
         fetch("controller", {
@@ -143,7 +220,7 @@ svgElement.addEventListener("click", function(event) {
             body: new URLSearchParams({
                 "x": x,
                 "y": y,
-                "r": r
+                "r": R
             })
         })
             .then(response => {
@@ -155,81 +232,50 @@ svgElement.addEventListener("click", function(event) {
             .then(function (serverAnswer) {
                 let tbody = document.getElementById("output");
                 tbody.innerHTML = serverAnswer;
-                transformIntoDot(x, y, r, serverAnswer)
+                // transformIntoDot(x, y, r, serverAnswer)
             })
             .catch(error => {
                 alert(`There was an error processing your request: ${error.message}`);
             });
     } else {
-            Toastify({
-                text: validator.getMessage(),
-                className: "info",
-                style: {
-                    background: "linear-gradient(to right, #00b09b, #96c93d)",
-                    border: "1px solid white"
-                },
-                offset: {
-                    x: 240,
-                    y: 60
-                },
-                position: "right",
-            }).showToast();
-        }
+        Toastify({
+            text: message,
+            className: "info",
+            style: {
+                background: "linear-gradient(to right, #00b09b, #96c93d)",
+                border: "1px solid white"
+            },
+            offset: {
+                x: 240,
+                y: 60
+            },
+            position: "right",
+        }).showToast();
+    }
 });
 
-function transformIntoDot(x, y, r, data) {
-    const success = data.lastIndexOf("Hit") > data.lastIndexOf("Didnt hit");
-    const color = success ? "green" : "red";
-
-    // Перевод в координаты SVG
-    const svgX = (x / r) * 100 + 150;
-    const svgY = 150 - (y / r) * 100;
-
-    // Добавляем точку
-    addDotToSvg(svgX, svgY, color, 5);
-}
-
-function addDotToSvg(x, y, color, r) {
-    const svgElement = document.querySelector("svg");
-
-    const newDot = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-    newDot.setAttribute("cx", x);
-    newDot.setAttribute("cy", y);
-    newDot.setAttribute("r", r);
-    newDot.setAttribute("fill", color);
-    svgElement.appendChild(newDot);
-}
-
-function updateSVG(r) {
-    // Update text
-    document.querySelector('text[x="195"]').textContent = `${r/2}`;
-    document.querySelector('text[x="248"]').textContent = `${r}`;
-    document.querySelector('text[x="40"]').textContent = `-${r}`;
-    document.querySelector('text[x="90"]').textContent = `-${r/2}`;
-    document.querySelector('text[y="105"]').textContent = `${r/2}`;
-    document.querySelector('text[y="55"]').textContent = `${r}`;
-    document.querySelector('text[y="205"]').textContent = `-${r/2}`;
-    document.querySelector('text[y="255"]').textContent = `-${r}`;
-
-    // Update rectangle (left bottom)
-    const rect = document.querySelector("rect");
-    rect.setAttribute('width', 100 * r / 2);
-    rect.setAttribute('height', 100 * r);
-
-    // Update triangle (right bottom)
-    const triangle = document.querySelector("polygon");
-    const trianglePoints = `150,250 150,${250 - 100 * r} ${150 - 100 * r / 2},150`;
-    triangle.setAttribute('points', trianglePoints);
-
-    // Update semi-circle (left top)
-    const semiCircle = document.querySelector("path");
-    const semiCirclePath = `M ${150 - 100 * r} 150 A ${100 * r} ${100 * r}, 0, 0, 1, 150 ${150 - 100 * r} L 150 150 Z`;
-    semiCircle.setAttribute('d', semiCirclePath);
-}
-
 const rElement = document.querySelector('#r');
-
-rElement.addEventListener('input', function() {
-    const r = parseFloat(rElement.value);
-    updateSVG(r);
+rElement.addEventListener('input', function () {
+    let r = parseFloat(rElement.value);
+    if (isNaN(r)) {
+        r = 3; // Default R value
+    }
+    if (isRadiusAcceptable(r)) {
+        console.log(`Drawing graph with r: ${r}`);
+        drawGraph(r);  // Drawing the graph based on new R value
+    } else {
+        Toastify({
+            text: message,
+            className: "info",
+            style: {
+                background: "linear-gradient(to right, #00b09b, #96c93d)",
+                border: "1px solid white"
+            },
+            offset: {
+                x: 240,
+                y: 60
+            },
+            position: "right",
+        }).showToast();
+    }
 });
