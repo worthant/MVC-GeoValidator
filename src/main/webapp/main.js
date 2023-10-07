@@ -28,6 +28,7 @@ function drawGraph(R) {
 
     let baseScaling = width / 6;
     let dynamicScalingFactor = baseScaling / R;
+    let yAxisOffset = 15;
 
     // Clear canvas
     ctx.clearRect(0, 0, width, height);
@@ -36,10 +37,10 @@ function drawGraph(R) {
     ctx.strokeStyle = "gray";
     ctx.lineWidth = 1;
     ctx.beginPath();
-    ctx.moveTo(0, height / 2);
-    ctx.lineTo(width, height / 2);
-    ctx.moveTo(width / 2, 0);
-    ctx.lineTo(width / 2, height);
+    ctx.moveTo(width / 4, height / 2); // X-axis
+    ctx.lineTo(3 * width / 4, height / 2);
+    ctx.moveTo(width / 2, height / 4); // Y-axis
+    ctx.lineTo(width / 2, 3 * height / 4);
     ctx.stroke();
 
     // Drawing the areas
@@ -74,12 +75,19 @@ function drawGraph(R) {
 
     // Draw ticks and labels
     ctx.fillStyle = "white";
-    ctx.fillText(R.toString(), width / 2 + R * dynamicScalingFactor, height / 2 + 15);
-    ctx.fillText((R / 2).toString(), width / 2 + (R / 2) * dynamicScalingFactor, height / 2 + 15);
-    ctx.fillText((-R).toString(), width / 2 - R * dynamicScalingFactor, height / 2 + 15);
-    ctx.fillText((-R / 2).toString(), width / 2 - (R / 2) * dynamicScalingFactor, height / 2 + 15);
-    ctx.fillText("X", width - 10, height / 2 + 15);
-    ctx.fillText("Y", width / 2 + 5, 10);
+    // OX labels
+    ctx.fillText(R.toString(), width / 2 + R * dynamicScalingFactor, height / 2 + 30);
+    ctx.fillText((R / 2).toString(), width / 2 + (R / 2) * dynamicScalingFactor, height / 2 + 30);
+    ctx.fillText((-R).toString(), width / 2 - R * dynamicScalingFactor, height / 2 + 30);
+    ctx.fillText((-R / 2).toString(), width / 2 - (R / 2) * dynamicScalingFactor, height / 2 + 30);
+    ctx.fillText("X", 3 * width / 4 + 5, height / 2 + 5);
+
+    // OY labels
+    ctx.fillText(R.toString(), width / 2 + yAxisOffset, height / 2 - R * dynamicScalingFactor);
+    ctx.fillText((R / 2).toString(), width / 2 + yAxisOffset, height / 2 - (R / 2) * dynamicScalingFactor);
+    ctx.fillText((-R).toString(), width / 2 + yAxisOffset, height / 2 + R * dynamicScalingFactor);
+    ctx.fillText((-R / 2).toString(), width / 2 + yAxisOffset, height / 2 + (R / 2) * dynamicScalingFactor);
+    ctx.fillText("Y", width / 2 - 5, height / 4 - 5);
 }
 
 
@@ -191,7 +199,6 @@ mainForm.addEventListener('click', function (e) {
     }
 });
 
-const svgElement = document.querySelector("svg");
 canvas.addEventListener("click", function (event) {
     const rElement = document.querySelector('#r');
     if (!rElement || !rElement.value || isNaN(parseFloat(rElement.value))) {
