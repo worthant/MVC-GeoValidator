@@ -32,12 +32,10 @@ public class AreaCheckServlet extends HttpServlet {
             CoordinatesValidator validator = new CoordinatesValidator(x, y, r);
 
             if (!validator.checkData()) {
-                System.out.println("validation haven't passed");
+                System.out.println("Validation haven't passed");
                 ErrorUtil.sendError(response, SC_UNPROCESSABLE_ENTITY, "Data haven't passed validation");
                 return;
             }
-
-            boolean isHit = AreaChecker.isInArea(x, y, r);
 
             ResultsBean bean = (ResultsBean) request.getSession().getAttribute("results");
             if (bean == null) {
@@ -45,18 +43,14 @@ public class AreaCheckServlet extends HttpServlet {
                 request.getSession().setAttribute("results", bean);
             }
 
-            ResultsBean.Result result = new ResultsBean.Result(String.valueOf(x), String.valueOf(y), String.valueOf(r), isHit);
+            ResultsBean.Result result = new ResultsBean.Result(String.valueOf((int) x),
+                    String.valueOf(y), String.valueOf(r), AreaChecker.isInArea(x, y, r));
             bean.addResult(result);
 
-            response.sendRedirect("table.jsp");
-
-//            PrintWriter out = response.getWriter();
-//            out.println("<tr>");
-//            out.println("<td>" + x + "</td>");
-//            out.println("<td>" + y + "</td>");
-//            out.println("<td>" + r + "</td>");
-//            out.println("<td>" + (isHit ? "Hit" : "Didn't hit") + "</td>");
-//            out.println("</tr>");
+            // Respond with JSON
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            response.getWriter().write(new Gson().toJson(result));
         } catch (NumberFormatException e) {
             ErrorUtil.sendError(response, SC_UNPROCESSABLE_ENTITY, "Invalid number format");
         } catch (Exception e) {
