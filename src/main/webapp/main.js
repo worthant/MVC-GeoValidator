@@ -4,6 +4,8 @@ import inputValidator from "./inputValidator.js";
 
 let message = "";
 let clickedPoints = [];
+let hasUserInputR;
+let r;
 
 function isPointInsideArea(x, y, R) {
     let validator = new inputValidator();
@@ -31,8 +33,8 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 window.onload = function () {
-    drawGraph(3);
     setCanvasDPI();
+    drawGraph(3);
 }
 
 const canvas = document.getElementById("graphCanvas");
@@ -109,19 +111,20 @@ function drawGraph(R) {
 
     // Draw labels
     ctx.fillStyle = "white";
+    const labelR = hasUserInputR ? R.toString() : "R";
+    const labelRHalf = hasUserInputR ? (R / 2).toString() : "R/2";
+
     // X-axis labels
-    ctx.fillText(R.toString(), width / 2 + R * dynamicScalingFactor, height / 2 + 30);
-    ctx.fillText((R / 2).toString(), width / 2 + (R / 2) * dynamicScalingFactor, height / 2 + 30);
-    ctx.fillText((-R).toString(), width / 2 - R * dynamicScalingFactor, height / 2 + 30);
-    ctx.fillText((-R / 2).toString(), width / 2 - (R / 2) * dynamicScalingFactor, height / 2 + 30);
-    ctx.fillText("X", 3 * width / 4 + 5, height / 2 + 5);
+    ctx.fillText(labelR, width / 2 + R * dynamicScalingFactor, height / 2 + 30);
+    ctx.fillText(labelRHalf, width / 2 + (R / 2) * dynamicScalingFactor, height / 2 + 30);
+    ctx.fillText('-' + labelR, width / 2 - R * dynamicScalingFactor, height / 2 + 30);
+    ctx.fillText('-' + labelRHalf, width / 2 - (R / 2) * dynamicScalingFactor, height / 2 + 30);
 
     // Y-axis labels
-    ctx.fillText(R.toString(), width / 2 + yAxisOffset, height / 2 - R * dynamicScalingFactor);
-    ctx.fillText((R / 2).toString(), width / 2 + yAxisOffset, height / 2 - (R / 2) * dynamicScalingFactor);
-    ctx.fillText((-R).toString(), width / 2 + yAxisOffset, height / 2 + R * dynamicScalingFactor);
-    ctx.fillText((-R / 2).toString(), width / 2 + yAxisOffset, height / 2 + (R / 2) * dynamicScalingFactor);
-    ctx.fillText("Y", width / 2, height / 4 - 5);
+    ctx.fillText(labelR, width / 2 + yAxisOffset, height / 2 - R * dynamicScalingFactor);
+    ctx.fillText(labelRHalf, width / 2 + yAxisOffset, height / 2 - (R / 2) * dynamicScalingFactor);
+    ctx.fillText('-' + labelR, width / 2 + yAxisOffset, height / 2 + R * dynamicScalingFactor);
+    ctx.fillText('-' + labelRHalf, width / 2 + yAxisOffset, height / 2 + (R / 2) * dynamicScalingFactor);
 
     // Draw ticks
     ctx.fillStyle = "white";
@@ -143,8 +146,10 @@ function drawGraph(R) {
         ctx.lineTo(width / 2 + tickLength / 2, yTickPosition);
         ctx.stroke();
     }
-
-    drawAllPoints();
+    if (hasUserInputR) {
+        // console.log("drawing points");
+        drawAllPoints();
+    }
 }
 
 function drawAxis(context, fromX, fromY, toX, toY) {
@@ -160,30 +165,37 @@ function drawAxis(context, fromX, fromY, toX, toY) {
     context.stroke();
 }
 
-function drawPoint(x, y, hit) {
+function drawPoint(x, y, isHit) {
     let canvasX = canvas.width / 2 + x * dynamicScalingFactor;
     let canvasY = canvas.height / 2 - y * dynamicScalingFactor;
-    ctx.fillStyle = hit ? "green" : "red";
+
+    ctx.fillStyle = isHit ? "green" : "red" ;
     ctx.beginPath();
     ctx.arc(canvasX, canvasY, 5, 0, Math.PI * 2);
     ctx.fill();
 }
 
-function drawAllPoints() {
-    clickedPoints.forEach(point => {
-        drawPoint(point.x, point.y, point.hit);
-    });
+async function drawAllPoints() {
+    for (const point of clickedPoints) {
+        const isInside = await isPointInsideDesiredArea(point.x, point.y, r);
+        drawPoint(point.x, point.y, isInside);
+    }
 }
 
 function updateTableAndGraph(data) {
+
+    let parsedX = parseInt(data.x);
+    let parsedY = parseFloat(data.y);
+    let parsedR = parseFloat(data.r);
+
     // Draw the new point directly
-    drawPoint(data.x, data.y, data.hit);
+    drawPoint(parsedX, parsedY, data.isHit);
 
     // Push it to clickedPoints
-    clickedPoints.push(data);
+    clickedPoints.push({x: parsedX, y: parsedY, r: parsedR, isHit: data.isHit});
 
     // Update Table
-    const table = document.getElementById('yourTableId');
+    const table = document.getElementById('result');
     const newRow = table.insertRow();
     const cell1 = newRow.insertCell(0);
     const cell2 = newRow.insertCell(1);
@@ -193,7 +205,7 @@ function updateTableAndGraph(data) {
     cell1.innerHTML = data.x;
     cell2.innerHTML = data.y;
     cell3.innerHTML = data.r;
-    cell4.innerHTML = data.hit ? 'Hit' : 'Didn\'t hit';
+    cell4.innerHTML = data.isHit ? 'Hit' : 'Didn\'t hit';
 }
 
 const mainForm = document.querySelector('input[value="Check"]');
@@ -231,51 +243,27 @@ mainForm.addEventListener('click', function (e) {
                     if (!response.ok) {
                         throw new Error(`Server responded with bad getaway status: ${response.status} ${response.text()}`);
                     }
-                    return response.text();
+                    return response.json();
                 })
-                .then(function () {
-                    drawAllPoints();
+                .then(function (serverAnswer) {
+                    updateTableAndGraph(serverAnswer);
                 })
                 .catch(error => {
-                    alert(`There was an error processing your request: ${error.message}`);
+                    showToast(`There was an error processing your request: ${error.message}`);
                 });
         } else {
             console.log(`client validation: failed`);
-            Toastify({
-                text: message,
-                className: "info",
-                style: {
-                    background: "linear-gradient(to right, #00b09b, #96c93d)",
-                    border: "1px solid white"
-                },
-                offset: {
-                    x: 240,
-                    y: 60
-                },
-                position: "right",
-            }).showToast();
+            showToast(message);
         }
     } else {
-        Toastify({
-            text: "You should fill the form before submitting it :)",
-            className: "info",
-            style: {
-                background: "linear-gradient(to right, #00b09b, #96c93d)",
-                border: "1px solid white"
-            },
-            offset: {
-                x: 240,
-                y: 60
-            },
-            position: "right",
-        }).showToast();
+        showToast("You should fill the form before submitting it :)");
     }
 });
 
 canvas.addEventListener("click", function (event) {
     const rElement = document.querySelector('#r');
     if (!rElement || !rElement.value || isNaN(parseFloat(rElement.value))) {
-        alert("Не возможно определить координаты точки без радиуса");
+        showToast("Невозможно определить координаты точки без радиуса");
         return;
     }
 
@@ -293,7 +281,6 @@ canvas.addEventListener("click", function (event) {
     console.log(`Graph values: ${graphX}, ${graphY}`);
 
     if (isPointInsideArea(graphX, graphY, R)) {
-        console.log(`client validation: passed`);
 
         fetch("controller", {
             method: "POST",
@@ -310,54 +297,75 @@ canvas.addEventListener("click", function (event) {
                 if (!response.ok) {
                     throw new Error(`Server responded with bad getaway status: ${response.status} ${response.text()}`);
                 }
-                return response.text();
+                return response.json();
             })
             .then(function (serverAnswer) {
                 updateTableAndGraph(serverAnswer);
             })
             .catch(error => {
-                alert(`There was an error processing your request: ${error.message}`);
+                showToast(`There was an error processing your request: ${error.message}`);
             });
     } else {
         console.log(`client validation: failed`);
-        Toastify({
-            text: message,
-            className: "info",
-            style: {
-                background: "linear-gradient(to right, #00b09b, #96c93d)",
-                border: "1px solid white"
-            },
-            offset: {
-                x: 240,
-                y: 60
-            },
-            position: "right",
-        }).showToast();
+        showToast(message);
     }
 });
 
 const rElement = document.querySelector('#r');
 rElement.addEventListener('input', function () {
-    let r = parseFloat(rElement.value);
+    r = parseFloat(rElement.value);
     if (isNaN(r)) {
         r = 3; // Default R value
+        hasUserInputR = false;
+    } else {
+        hasUserInputR = true;
     }
     if (isRadiusAcceptable(r)) {
         console.log(`Drawing graph with r: ${r}`);
         drawGraph(r);  // Drawing the graph based on new R value
     } else {
-        Toastify({
-            text: message,
-            className: "info",
-            style: {
-                background: "linear-gradient(to right, #00b09b, #96c93d)",
-                border: "1px solid white"
-            },
-            offset: {
-                x: 240,
-                y: 60
-            },
-            position: "right",
-        }).showToast();
+        showToast(message);
     }
 });
+
+async function isPointInsideDesiredArea(x, y, r) {
+    try {
+        const response = await fetch("controller", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded",
+            },
+            body: new URLSearchParams({
+                "x": x,
+                "y": y,
+                "r": r
+            })
+        })
+
+        if (!response.ok) {
+            throw new Error(`Server responded with bad getaway status: ${response.status} ${await response.text()}`);
+        }
+
+        const serverAnswer = await response.json();
+        return serverAnswer.isHit;
+    } catch (error) {
+        showToast(`There was an error processing your request: ${error.message}`);
+        return null;
+    }
+}
+
+function showToast(message, className = "info", offsetX = -300, offsetY = 140, position = "right") {
+    Toastify({
+        text: message,
+        className: className,
+        style: {
+            background: "linear-gradient(to right, #00b09b, #96c93d)",
+            border: "1px solid white"
+        },
+        offset: {
+            x: offsetX,
+            y: offsetY
+        },
+        position: position
+    }).showToast();
+}
