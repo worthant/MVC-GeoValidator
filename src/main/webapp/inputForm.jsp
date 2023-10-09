@@ -28,11 +28,11 @@
     </div>
     <div class="input-group">
         <label for="y">Y:</label>
-        <input type="text" id="y" name="y" maxlength="8">
+        <input type="text" id="y" name="y" maxlength="8" placeholder="Y: (-3, 5)">
     </div>
     <div class="input-group">
         <label for="r">R:</label>
-        <input type="text" id="r" name="r" maxlength="8">
+        <input type="text" id="r" name="r" maxlength="8" placeholder="default: 3; R: (2, 5)">
     </div>
     <div class="check-btn">
         <input type="submit" value="Check">
