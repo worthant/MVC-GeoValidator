@@ -8,7 +8,7 @@ public class AreaChecker {
         }
         // Bottom left corner with triangle
         if (x <= 0 && y <= 0) {
-            return (x >= -r / 2) && (y >= x * 2 - r);
+            return (x >= -r) && (y >= -x - r);
         }
         // Bottom right corner with rectangle
         if (x >= 0 && y <= 0) {
