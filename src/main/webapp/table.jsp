@@ -11,6 +11,6 @@
     <td>${result.x}</td>
     <td>${result.y}</td>
     <td>${result.r}</td>
-    <td>${result.hit ? "Hit" : "Didnt hit"}</td>
+    <td>${result.isHit ? "Hit" : "Didnt hit"}</td>
   </tr>
 </core:forEach>

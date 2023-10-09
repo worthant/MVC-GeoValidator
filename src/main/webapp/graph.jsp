@@ -21,7 +21,7 @@
             {
                 x: ${result.x},
                 y: ${result.y},
-                hit: ${result.hit ? 'true' : 'false'}
+                isHit: ${result.isHit ? 'true' : 'false'}
             },
             </core:forEach>
         ];
