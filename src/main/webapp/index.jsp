@@ -1,4 +1,4 @@
-<%@ page import="beans.ResultsBean" %>
+<%@ taglib prefix="core" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
 <head>
     <meta charset="UTF-8">
@@ -6,13 +6,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <meta name="author" content="Дворкин Борис Александрович">
-    <meta name="description" content="Веб-программирование: Лабораторная работа №1.">
+    <meta name="description" content="Веб-программирование: Лабораторная работа №2.">
     <meta name="keywords"
           content="ITMO, ИТМО, ЛИТМО, web lab, веб, ПИиКТ, ВТ, Лабораторная работа, Веб-программирование" />
 
     <!-- <link rel="stylesheet" href="styles.css"> -->
     <link rel="icon" type="image/png" href="resources/favicon.png">
-    <title>Web programming laboratory work no. 1</title>
+    <title>Web programming laboratory work no. 2</title>
 
     <style>
         @import url('https://fonts.cdnfonts.com/css/palatino');
@@ -34,7 +34,7 @@
             grid-template-columns: 1fr auto 1fr;
             align-items: center;
 
-            box-shadow: 0px 0px 2px white;
+            box-shadow: 0 0 2px white;
             backdrop-filter: blur(10px);
         }
 
@@ -76,7 +76,7 @@
             align-items: center;
             justify-content: center;
             backdrop-filter: blur(7px);
-            box-shadow: 0px 0px 3px white;
+            box-shadow: 0 0 3px white;
 
             max-height: 700px;
         }
@@ -98,7 +98,6 @@
             margin-bottom: 1em;
             gap: 15px;
         }
-
 
         .radio-group {
             display: flex;
@@ -146,7 +145,7 @@
             flex-direction: row;
             justify-content: center;
             backdrop-filter: blur(7px);
-            box-shadow: 0px 0px 3px white;
+            box-shadow: 0 0 3px white;
             border-radius: 20px 20px 0 0;
         }
 
