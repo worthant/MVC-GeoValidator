@@ -8,18 +8,21 @@
 </p>
 
 <p align="center">
-  <a aria-label="WildFly Version" href="https://www.wildfly.org/">
-    <img alt="" src="https://img.shields.io/badge/WildFly-21.0.0-green?style=for-the-badge">
-  </a>
-  <a aria-label="Java Version" href="https://www.oracle.com/java/technologies/javase-jdk17-downloads.html">
-    <img alt="" src="https://img.shields.io/badge/Java-17-orange?style=for-the-badge">
-  </a>
-  <a aria-label="JetBrains Runtime Version" href="https://www.jetbrains.com/">
-    <img alt="" src="https://img.shields.io/badge/JetBrains_Runtime-17.0.8-blue?style=for-the-badge">
-  </a>
-  <a aria-label="Maven Project" href="https://maven.apache.org/">
-    <img alt="" src="https://img.shields.io/badge/Maven-Project-red?style=for-the-badge">
-  </a>
+   <a aria-label="Translation" href="./README.md">
+      <img alt="" src="https://img.shields.io/badge/translation-EN-007FFF?style=for-the-badge&labelColor=000000&color=007FFF"> 
+   </a>
+   <a aria-label="WildFly Version" href="https://www.wildfly.org/">
+      <img alt="" src="https://img.shields.io/badge/WildFly-21.0.0-50FA7B?style=for-the-badge&labelColor=000000&color=50FA7B">
+   </a>
+   <a aria-label="Java Version" href="https://www.oracle.com/java/technologies/javase-jdk17-downloads.html">
+      <img alt="" src="https://img.shields.io/badge/Java-17-FFD300?style=for-the-badge&labelColor=000000&color=FFD300">
+   </a>
+   <a aria-label="JetBrains Runtime Version" href="https://www.jetbrains.com/">
+      <img alt="" src="https://img.shields.io/badge/JetBrains_Runtime-17.0.8-00CCFF?style=for-the-badge&labelColor=000000&color=00CCFF">
+   </a>
+   <a aria-label="Maven Project" href="https://maven.apache.org/">
+      <img alt="" src="https://img.shields.io/badge/Maven-Project-FF69B4?style=for-the-badge&labelColor=000000&color=FF69B4">
+   </a>
 </p>
 
 <details open>
@@ -106,7 +109,7 @@
 
 #### 🌐 Деплой:
 
-- Разработанное веб-приложение должно быть развёрнуто на сервере `WildFly` в standalone-конфигурации, порты должны быть настроены в соответствии с выданным `portbase`, доступ к http listener'у должен быть открыт для всех IP.
+- [x] Разработанное веб-приложение должно быть развёрнуто на сервере `WildFly` в standalone-конфигурации, порты должны быть настроены в соответствии с выданным `portbase`, доступ к http listener'у должен быть открыт для всех IP.
 
 <a id="защита"></a>
 
@@ -198,16 +201,16 @@
 ssh -p 2222 s******@se.ifmo.ru -L <portbase>:helios.cs.ifmo.ru:<portbase>
 ```   
 
-аргумент ssh команды -L означает, что порт на локальном хосте должен быть перенаправлен на указанный хост и
+> Аргумент ssh команды -L означает, что порт на локальном хосте должен быть перенаправлен на указанный хост и
 порт на удаленной стороне.
 
-4. Запускаем сервер:
+5. Запускаем сервер:
 
 ```bash
 bash ~/wildfly/wildfly-21.0.0.Final/bin/standalone.sh
 ```
 
-5. Переходим в браузере по url: http://localhost:8080/war_name.
+6. Переходим в браузере по url: http://localhost:8080/war_name.
 
 ## Руководство по эксплуатации моей лабы
 
@@ -247,9 +250,9 @@ ssh -L 32318:localhost:32318 s368090@se.ifmo.ru -p 2222
 1. **Мой `разбор` теоретических вопросов**: [theory.md](./theory.md)
 2. **Официальная презентация по вебу с se.ifmo**: <https://se.ifmo.ru/~s367837/internet.pdf>
 3. **Документация Oracle по `Java EE APIs`**: <https://docs.oracle.com/javaee/7/api/index.html>
-3. **Разбор вопросов от `EgorMit`**: [Lab2.md](https://github.com/EgorMIt/ITMO/blob/master/2%20-%20%D0%92%D0%B5%D0%B1-%D0%9F%D1%80%D0%BE%D0%B3%D1%80%D0%B0%D0%BC%D0%BC%D0%B8%D1%80%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5/Lab2.md) 
-3. **Web docs 1**: <https://www.w3schools.com/css/css3_borders.asp>
-4. **Web docs 2**: <https://developer.mozilla.org/en-US/docs/Web/HTML/Element/th>
-5. **Интересный гайд на вопросы с se.ifmo** : [guide](https://docs.google.com/document/d/1ERKz7M5CnF_sDTW6Fkhw4zmlbiLbEUtRtWUz8PIujSQ/edit)
-6. (`Рекомендуется для курса веб-программирования если что-то непонятно`) - [Введение в enterprise](https://javarush.com/groups/posts/2514-vvedenie-v-enterprise-razrabotku)
+4. **Разбор вопросов от `EgorMit`**: [Lab2.md](https://github.com/EgorMIt/ITMO/blob/master/2%20-%20%D0%92%D0%B5%D0%B1-%D0%9F%D1%80%D0%BE%D0%B3%D1%80%D0%B0%D0%BC%D0%BC%D0%B8%D1%80%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5/Lab2.md) 
+5. **Web docs 1**: <https://www.w3schools.com/css/css3_borders.asp>
+6. **Web docs 2**: <https://developer.mozilla.org/en-US/docs/Web/HTML/Element/th>
+7. **Интересный гайд на вопросы с se.ifmo** : [guide](https://docs.google.com/document/d/1ERKz7M5CnF_sDTW6Fkhw4zmlbiLbEUtRtWUz8PIujSQ/edit)
+8. (`Рекомендуется для курса веб-программирования если что-то непонятно`) - [Введение в enterprise](https://javarush.com/groups/posts/2514-vvedenie-v-enterprise-razrabotku)
 > - Сеть, клиент-сервер, HTTP/HTTPS, Maven, Сервлёты, Контейнеры сервлётов, MVC
