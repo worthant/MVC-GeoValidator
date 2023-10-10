@@ -1,7 +1,7 @@
 <p align="center">
-  <a href="https://ibb.co/Sv4F0Yq">
+  <a href="resources/MVC.png">
     <picture>
-      <img src="https://i.ibb.co/nkNxfdh/html.png" height="110">
+      <img src="resources/MVC.png" height="200">
     </picture>
     <h1 align="center">MVC Гео-валидатор</h1>
   </a>
