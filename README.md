@@ -137,8 +137,13 @@
 
 ## How to Deploy *Your* Lab on Helios to Make it Work?
 
-1. Download Wildfly version 21 (LGPL) from here: https://www.wildfly.org/downloads/#21.0.0.Final
-2. Unpack and upload the archive to Helios (Yes, all 200 megabytes)
+1. Download and unpack WildFly. You can run those commands on helios:
+```bash
+curl https://download.jboss.org/wildfly/21.0.0.Final/wildfly-21.0.0.Final.zip -o wildfly.zip
+unzip wildfly.zip -d wildfly
+```
+
+2. Upload war package with your web application on helios and put to the `~/wildfly/wildfly-21.0.0.Final/standalone/deployments/` directory.
 
 > [How to Connect and Upload Files to Helios](https://github.com/Imtjl/1st-year-guide#Connection)
 
