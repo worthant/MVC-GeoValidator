@@ -135,12 +135,19 @@
 
 ## Как задеплоить *вашу* лабу на гелиос чтобы работало?
 
-1. Скачиваете Wildfly 21 версии (LGPL) отсюда: https://www.wildfly.org/downloads/#21.0.0.Final
-2. Распаковываем и заливаем архив на гелиос (Да-да, все 200 мегабайт)
+1. Скачайте и распакуйте WIldfly. Чтобы сделать это `сразу же на гелиосе`, подключитесь к нему и напишите:
 
-> [Как подключаться и заливать файлы на Гелиос](https://github.com/Imtjl/1st-year-guide#%D0%9F%D0%BE%D0%B4%D0%BA%D0%BB%D1%8E%D1%87%D0%B5%D0%BD%D0%B8%D0%B5)
+```bash
+curl https://download.jboss.org/wildfly/21.0.0.Final/wildfly-21.0.0.Final.zip -o wildfly.zip
+unzip wildfly.zip -d wildfly
+```
 
-3. в `~/wildfly/wildfly-21.0.0.Final/standalone/configuration/standalone.xml` меняем:
+2. Загрузите `war`-архив на гелиос и поместите в директорию `~/wildfly/wildfly-21.0.0.Final/standalone/deployments/`.
+
+> - Можете заменить в `deploy.sh` мой табельный номер на свой и задеплоить, написав `./deploy.sh`  
+> - [Как подключиться к гелиусу и залить туда файлы](https://github.com/Imtjl/1st-year-guide#Connection)
+
+3. В `~/wildfly/wildfly-21.0.0.Final/standalone/configuration/standalone.xml` меняем:
 
 > Просто `vim standalone.xml`, потом i для `insert` и редачим. Чтобы сохранить и выйти из вима нажмите `Esc` и
 > напишите `:wq`
